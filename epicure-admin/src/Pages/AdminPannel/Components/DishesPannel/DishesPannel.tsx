@@ -5,17 +5,17 @@ import AdminTable from "../Table/Table";
 
 const DishesPannel=()=>{
     let dishes:any[] = [];
+    const culomns = ["name", "image", "type", "description", "price", "restaurant"];
     const [bestDishes, setBestDishes] = useState(dishes);
     useEffect(() => {
       getBestDishesData().then((res) => {
         setBestDishes(res.data);
-        console.log(res.data)
       });
     }, []);
     const title="Dishes Pannel";
 
     return(<div>
-        {bestDishes.length&&<AdminTable Array={bestDishes} Title={title}/>}
+        {bestDishes.length&&<AdminTable Array={bestDishes} Title={title} Culomns={culomns}/>}
     </div>)
 }
 
