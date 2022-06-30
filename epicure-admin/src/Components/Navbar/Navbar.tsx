@@ -7,6 +7,17 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 
 const Navbar = () => {
+  const goTo = (where: number) => {
+    switch (where) {
+      case 1:
+        window.location.href = "/SingUp";
+        break;
+      case 0: {
+        window.location.href = "/";
+        break;
+      }
+    }
+  };
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -23,7 +34,10 @@ const Navbar = () => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             News
           </Typography>
-          <Button color="inherit">Login</Button>
+          <Button color="inherit" onClick={() => goTo(0)}>Login</Button>
+          <Button color="inherit" onClick={() => goTo(1)}>
+            Sing Up
+          </Button>
         </Toolbar>
       </AppBar>
     </Box>

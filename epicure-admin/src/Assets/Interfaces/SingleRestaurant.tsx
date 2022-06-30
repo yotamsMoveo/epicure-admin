@@ -9,4 +9,5 @@ export interface SingleRestaurant {
   rating: number;
   open_hour: number;
   _id:string;
+  active:boolean;
 }

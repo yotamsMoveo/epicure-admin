@@ -10,11 +10,12 @@ import { SingleDish } from "../../../../Assets/Interfaces/SingleDish";
 import { getBestDishesData } from "../../../../services/api-services";
 import { useEffect, useState } from "react";
 import "../Table/Table.scss";
-import { IconButton } from "@mui/material";
+import { Button, IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import EditModal from "../../../../Components/Modal/EditModal";
 import { SingleRestaurant } from "../../../../Assets/Interfaces/SingleRestaurant";
+import NewModal from "../../../../Components/Modal/NewModal";
 export interface TableProps {
   Array: any[];
   Title: string;
@@ -22,10 +23,15 @@ export interface TableProps {
 }
 
 const AdminTable: React.FC<TableProps> = ({ Array, Title, Culomns }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isNewOpen, setIsNewOpen] = useState(false);
   const openEtidModal = (currentDish:SingleDish) => {
     setDish(currentDish)
-    setIsOpen(prevState=>!prevState)
+    setIsEditOpen(prevState=>!prevState)
+  };
+  const openNewModal = () => {
+    //setDish(currentDish)
+    setIsNewOpen(prevState=>!prevState)
   };
   let rest:SingleRestaurant={
     image: "string",
@@ -35,7 +41,8 @@ const AdminTable: React.FC<TableProps> = ({ Array, Title, Culomns }) => {
     open_date: "string",
     rating: 0,
     open_hour: 0,
-    _id:"string"
+    _id:"string",
+    active:true
   }
   let dishToEdit:SingleDish={
     image: "string" ,
@@ -44,13 +51,18 @@ const AdminTable: React.FC<TableProps> = ({ Array, Title, Culomns }) => {
     type: "string" ,
     price: 7,
     restaurant:rest, 
-    dish_id: 0,
+    _id: "0",
     dish_time:"string"
   }
   const [dish,setDish]=useState(dishToEdit);
+  const inputsForEdit=['name','image','type','description','price'];
+  const inputsForNew=['name','image','type','description','price'];
   return (
     <div>
-      <h1>{Title}</h1>
+      <div className="admin-header"><h1>{Title}</h1>
+      <Button className="admin-header-button" onClick={()=>openNewModal()}>Add</Button>
+      </div>
+      
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
@@ -107,7 +119,8 @@ const AdminTable: React.FC<TableProps> = ({ Array, Title, Culomns }) => {
           </TableBody>
         </Table>
       </TableContainer>
-      {isOpen && <EditModal inputArrays={Culomns} dish={dish}/>}
+      {isEditOpen && <EditModal inputArrays={inputsForEdit} dishToUpdate={dish} />}
+      {isNewOpen && <NewModal inputArrays={inputsForNew}  />}
     </div>
   );
 };

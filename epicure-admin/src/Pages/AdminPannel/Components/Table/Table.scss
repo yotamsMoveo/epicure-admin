@@ -1,4 +1,14 @@
-.table-image{
-    width: 100px;
-    height: 100px;
+.table-image {
+  width: 100px;
+  height: 100px;
+}
+
+.admin-header {
+  display: flex;
+  h1 {
+    width: 100%;
+  }
+  .admin-header-button {
+    justify-content: flex-end;
+  }
 }

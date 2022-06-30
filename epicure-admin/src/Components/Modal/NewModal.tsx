@@ -5,14 +5,13 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import Input from "@mui/material/Input";
 import { SingleDish } from "../../Assets/Interfaces/SingleDish";
-import { ChangeEvent, useEffect } from "react";
+import { useEffect } from "react";
 import { useState } from "react";
-import { getResturantsData, updateDishData } from "../../services/api-services";
+import { addDishData, getResturantsData, updateDishData } from "../../services/api-services";
 import TextField from "@mui/material/TextField";
 import { Select } from "@mui/material";
 import { SingleRestaurant } from "../../Assets/Interfaces/SingleRestaurant";
-import { Label } from "@mui/icons-material";
-import { ChangeEventHandler } from "react";
+import "../Modal/NewModal.scss";
 
 const ariaLabel = { "aria-label": "description" };
 
@@ -30,36 +29,62 @@ const style = {
 
 export interface ModalProps {
   inputArrays: string[];
-  dishToUpdate: SingleDish;
 }
 
-const EditModal: React.FC<ModalProps> = ({ inputArrays, dishToUpdate }) => {
-  interface input {
-    value: any;
-  }
-  const inputs: { [key: string]: input } = {};
-  inputs["name"] = { value: dishToUpdate.name };
-  inputs["image"] = { value: dishToUpdate.image };
-  inputs["type"] = { value: dishToUpdate.type };
-  inputs["description"] = { value: dishToUpdate.description };
-  inputs["price"] = { value: dishToUpdate.price };
-  inputs["restaurant"] = { value: dishToUpdate.restaurant.name };
-
+const NewModal: React.FC<ModalProps> = ({ inputArrays }) => {
   const [open, setOpen] = React.useState(true);
   const [submit, setSubmit] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const allRestauranrs: SingleRestaurant[] = [];
   const [restaurants, setRestaurants] = useState(allRestauranrs);
-  useEffect(() => {
-    updateDishData(dishToUpdate._id, dishToUpdate);
-  }, [submit]);
+  interface input {
+    value: any;
+  }
+  const inputs: { [key: string]: input } = {};
+  inputs["name"] = { value: "" };
+  inputs["image"] = { value: "" };
+  inputs["type"] = { value: "" };
+  inputs["description"] = { value: "" };
+  inputs["price"] = { value: 0 };
+  inputs["restaurant"] = { value: ""};
+
   useEffect(() => {
     getResturantsData().then((res) => {
       setRestaurants(res.data);
     });
   }, []);
-  const [currency, setCurrency] = useState(dishToUpdate.restaurant);
+  let rest: SingleRestaurant = {
+    image: "string",
+    name: "string",
+    chef_name: "string",
+    chef: "string",
+    open_date: "string",
+    rating: 9,
+    open_hour: 9,
+    _id: "string",
+    active: true,
+  };
+  let dishToadd:any={
+    image: "string" ,
+    name: "string" ,
+    description: "string" ,
+    type: "string" ,
+    price: "4",
+    dish_time:"string"
+  }
+  const [currency, setCurrency] = useState(rest);
+  const handleInputsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.target.labels?.forEach(label => {
+      const data=label.attributes.getNamedItem('for')?.nodeValue;
+      let test="";
+      if(data){
+        test=data;
+      }
+      inputs[test].value=event.target.value;
+    });
+  }
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     restaurants.forEach((restaurant) => {
       if (restaurant.name.localeCompare(event.target.value) == 0) {
@@ -67,29 +92,19 @@ const EditModal: React.FC<ModalProps> = ({ inputArrays, dishToUpdate }) => {
       }
     });
   };
-  const handleInputsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-   event.target.labels?.forEach(label => {
-     const data=label.attributes.getNamedItem('for')?.nodeValue;
-     let test="";
-     if(data){
-       test=data;
-     }
-     inputs[test].value=event.target.value;
-   });
-    
-  };
-  let ss=false;
-  const sendUpdateReq = (inputs: any) => {
-    dishToUpdate.description=inputs["description"].value;
-    dishToUpdate.name=inputs["name"].value;
-    dishToUpdate.image=inputs["image"].value;
-    dishToUpdate.type=inputs["type"].value;
-    dishToUpdate.price=inputs["price"].value;
-    updateDishData(dishToUpdate._id,dishToUpdate).then((res) => {
+  
+
+  const sendAddReq = (inputs: any) => {
+    dishToadd.description = inputs["description"].value;
+    dishToadd.name = inputs["name"].value;
+    dishToadd.image = inputs["image"].value;
+    dishToadd.type = inputs["type"].value;
+    dishToadd.price = inputs["price"].value;
+    dishToadd.active=true;
+    addDishData(dishToadd).then((res) => {
       console.log(res.data);
     });
   };
-  
   return (
     <div>
       <Modal
@@ -99,7 +114,7 @@ const EditModal: React.FC<ModalProps> = ({ inputArrays, dishToUpdate }) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <h1>Edit Dish</h1>
+          <h1>Adding new Dish</h1>
           <Box
             component="form"
             sx={{
@@ -110,22 +125,22 @@ const EditModal: React.FC<ModalProps> = ({ inputArrays, dishToUpdate }) => {
           >
             {inputArrays.map((input: string, index) => (
               <TextField
-                key={index}
-                onChange={handleInputsChange}
-                id={input}
-                className={input}
-                label={input}
-                variant="outlined"
-                defaultValue={inputs[input].value}
-                autoComplete="true"
-                title={input}
+              key={index}
+              onChange={handleInputsChange}
+              id={input}
+              className={input}
+              label={input}
+              variant="outlined"
+              defaultValue={inputs[input].value}
+              autoComplete="true"
+              title={input}
               />
             ))}
             {restaurants.length && (
               <TextField
                 id="outlined-select-currency-native"
                 select
-                label="Restaurnt"
+                label="Restaurant"
                 value={currency.name}
                 onChange={handleChange}
                 SelectProps={{
@@ -140,10 +155,10 @@ const EditModal: React.FC<ModalProps> = ({ inputArrays, dishToUpdate }) => {
               </TextField>
             )}
           </Box>
-          <Button onClick={() => sendUpdateReq(inputs)}>Submit</Button>
+          <Button onClick={()=>sendAddReq(inputs)}>Add</Button>
         </Box>
       </Modal>
     </div>
   );
 };
-export default EditModal;
+export default NewModal;
