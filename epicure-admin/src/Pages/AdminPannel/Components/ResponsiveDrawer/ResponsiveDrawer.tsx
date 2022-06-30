@@ -17,6 +17,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import AdminTable from '../Table/Table';
 import DishesPannel from '../DishesPannel/DishesPannel';
+import { Button } from '@mui/material';
 
 const drawerWidth = 240;
 
@@ -75,10 +76,10 @@ interface Props {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
+          <Typography variant="h6" noWrap component="div" width="100%">
             Admin Pannel
           </Typography>
-          
+          <Button color="secondary">Log Out</Button>
         </Toolbar>
       </AppBar>
       <Box
