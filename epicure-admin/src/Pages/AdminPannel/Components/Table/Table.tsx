@@ -16,6 +16,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import EditModal from "../../../../Components/Modal/EditModal";
 import { SingleRestaurant } from "../../../../Assets/Interfaces/SingleRestaurant";
 import NewModal from "../../../../Components/Modal/NewModal";
+import DeleteModal from "../../../../Components/Modal/DeleteModal";
 export interface TableProps {
   Array: any[];
   Title: string;
@@ -25,10 +26,15 @@ export interface TableProps {
 const AdminTable: React.FC<TableProps> = ({ Array, Title, Culomns }) => {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isNewOpen, setIsNewOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const openEtidModal = (currentDish:SingleDish) => {
     setDish(currentDish)
     setIsEditOpen(prevState=>!prevState)
   };
+  const deleteRow=(currentDish:SingleDish)=>{
+    setDish(currentDish);
+    setIsDeleteOpen(prevState=>!prevState);
+  }
   const openNewModal = () => {
     //setDish(currentDish)
     setIsNewOpen(prevState=>!prevState)
@@ -52,7 +58,8 @@ const AdminTable: React.FC<TableProps> = ({ Array, Title, Culomns }) => {
     price: 7,
     restaurant:rest, 
     _id: "0",
-    dish_time:"string"
+    dish_time:"string",
+    active:true
   }
   const [dish,setDish]=useState(dishToEdit);
   const inputsForEdit=['name','image','type','description','price'];
@@ -97,6 +104,7 @@ const AdminTable: React.FC<TableProps> = ({ Array, Title, Culomns }) => {
                     color="inherit"
                     aria-label="menu"
                     sx={{ mr: 2 }}
+                    onClick={()=>deleteRow(currentDish)}
                   >
                     <DeleteIcon />
                   </IconButton>
@@ -121,6 +129,7 @@ const AdminTable: React.FC<TableProps> = ({ Array, Title, Culomns }) => {
       </TableContainer>
       {isEditOpen && <EditModal inputArrays={inputsForEdit} dishToUpdate={dish} />}
       {isNewOpen && <NewModal inputArrays={inputsForNew}  />}
+      {isDeleteOpen && <DeleteModal dishToDelete={dish} />}
     </div>
   );
 };

@@ -71,8 +71,10 @@ const NewModal: React.FC<ModalProps> = ({ inputArrays }) => {
     description: "string" ,
     type: "string" ,
     price: "4",
-    dish_time:"string"
+    dish_time:"string",
+    restaurant:rest
   }
+  const [dishToSend,setDishToSend]=useState(dishToadd)
   const [currency, setCurrency] = useState(rest);
   const handleInputsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.target.labels?.forEach(label => {
@@ -83,6 +85,16 @@ const NewModal: React.FC<ModalProps> = ({ inputArrays }) => {
       }
       inputs[test].value=event.target.value;
     });
+    dishToadd.description = inputs["description"].value;
+    dishToadd.name = inputs["name"].value;
+    dishToadd.image = inputs["image"].value;
+    dishToadd.type = inputs["type"].value;
+    dishToadd.price = inputs["price"].value;
+    dishToadd.active=true;
+    if(inputs["description"].value!=''&&inputs["name"].value!='' &&inputs["image"].value!=''&&inputs["type"].value!=''&&inputs["price"].value!=0){
+      setDishToSend(dishToadd);
+    }
+    
   }
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -94,14 +106,11 @@ const NewModal: React.FC<ModalProps> = ({ inputArrays }) => {
   };
   
 
-  const sendAddReq = (inputs: any) => {
-    dishToadd.description = inputs["description"].value;
-    dishToadd.name = inputs["name"].value;
-    dishToadd.image = inputs["image"].value;
-    dishToadd.type = inputs["type"].value;
-    dishToadd.price = inputs["price"].value;
-    dishToadd.active=true;
-    addDishData(dishToadd).then((res) => {
+  const sendAddReq = () => {
+    console.log(dishToSend);
+    dishToSend.restaurant=currency;
+    debugger;
+    addDishData(dishToSend).then((res) => {
       console.log(res.data);
     });
   };
@@ -123,7 +132,7 @@ const NewModal: React.FC<ModalProps> = ({ inputArrays }) => {
             noValidate
             autoComplete="off"
           >
-            {inputArrays.map((input: string, index) => (
+            {restaurants.length && inputArrays.map((input: string, index) => (
               <TextField
               key={index}
               onChange={handleInputsChange}
@@ -155,7 +164,7 @@ const NewModal: React.FC<ModalProps> = ({ inputArrays }) => {
               </TextField>
             )}
           </Box>
-          <Button onClick={()=>sendAddReq(inputs)}>Add</Button>
+          <Button onClick={()=>sendAddReq()}>Add</Button>
         </Box>
       </Modal>
     </div>

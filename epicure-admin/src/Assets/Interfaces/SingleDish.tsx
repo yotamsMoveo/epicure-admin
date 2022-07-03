@@ -9,5 +9,6 @@ export interface SingleDish {
     restaurant: SingleRestaurant ;
     _id: string;
     dish_time:string;
+    active:boolean;
   }
   

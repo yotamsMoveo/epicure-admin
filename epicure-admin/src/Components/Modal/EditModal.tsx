@@ -78,7 +78,7 @@ const EditModal: React.FC<ModalProps> = ({ inputArrays, dishToUpdate }) => {
    });
     
   };
-  let ss=false;
+
   const sendUpdateReq = (inputs: any) => {
     dishToUpdate.description=inputs["description"].value;
     dishToUpdate.name=inputs["name"].value;
