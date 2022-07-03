@@ -1,4 +1,5 @@
 import { SingleDish } from "../Assets/Interfaces/SingleDish";
+const token = localStorage.getItem('token');
 
 export async function getBestDishesData(): Promise<any> {
   const url = "http://localhost:8000/api/Dishes";
@@ -42,6 +43,7 @@ export async function getRestaurantsById(rest_id: string): Promise<any> {
   return data;
 }
 
+
 export async function updateDishData(
   dish_id: string,
   dishDataTOUpdate: SingleDish
@@ -54,6 +56,8 @@ export async function updateDishData(
     body: yy,
     headers: {
       'Content-Type': 'application/json',
+      Authorization:`x-access-token ${localStorage.getItem('token')}`
+
     },
   });
 
@@ -72,6 +76,7 @@ export async function addDishData(
     body: yy,
     headers: {
       'Content-Type': 'application/json',
+      Authorization:`x-access-token ${localStorage.getItem('token')}`
     },
   });
 

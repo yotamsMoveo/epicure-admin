@@ -88,6 +88,8 @@ const EditModal: React.FC<ModalProps> = ({ inputArrays, dishToUpdate }) => {
     updateDishData(dishToUpdate._id,dishToUpdate).then((res) => {
       console.log(res.data);
     });
+    handleClose();
+
   };
   
   return (

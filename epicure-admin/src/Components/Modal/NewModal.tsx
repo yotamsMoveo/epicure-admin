@@ -7,7 +7,11 @@ import Input from "@mui/material/Input";
 import { SingleDish } from "../../Assets/Interfaces/SingleDish";
 import { useEffect } from "react";
 import { useState } from "react";
-import { addDishData, getResturantsData, updateDishData } from "../../services/api-services";
+import {
+  addDishData,
+  getResturantsData,
+  updateDishData,
+} from "../../services/api-services";
 import TextField from "@mui/material/TextField";
 import { Select } from "@mui/material";
 import { SingleRestaurant } from "../../Assets/Interfaces/SingleRestaurant";
@@ -47,7 +51,7 @@ const NewModal: React.FC<ModalProps> = ({ inputArrays }) => {
   inputs["type"] = { value: "" };
   inputs["description"] = { value: "" };
   inputs["price"] = { value: 0 };
-  inputs["restaurant"] = { value: ""};
+  inputs["restaurant"] = { value: "" };
 
   useEffect(() => {
     getResturantsData().then((res) => {
@@ -65,37 +69,42 @@ const NewModal: React.FC<ModalProps> = ({ inputArrays }) => {
     _id: "string",
     active: true,
   };
-  let dishToadd:any={
-    image: "string" ,
-    name: "string" ,
-    description: "string" ,
-    type: "string" ,
+  let dishToadd: any = {
+    image: "string",
+    name: "string",
+    description: "string",
+    type: "string",
     price: "4",
-    dish_time:"string",
-    restaurant:rest
-  }
-  const [dishToSend,setDishToSend]=useState(dishToadd)
+    dish_time: "string",
+    restaurant: rest,
+  };
+  const [dishToSend, setDishToSend] = useState(dishToadd);
   const [currency, setCurrency] = useState(rest);
   const handleInputsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.target.labels?.forEach(label => {
-      const data=label.attributes.getNamedItem('for')?.nodeValue;
-      let test="";
-      if(data){
-        test=data;
+    event.target.labels?.forEach((label) => {
+      const data = label.attributes.getNamedItem("for")?.nodeValue;
+      let test = "";
+      if (data) {
+        test = data;
       }
-      inputs[test].value=event.target.value;
+      inputs[test].value = event.target.value;
     });
     dishToadd.description = inputs["description"].value;
     dishToadd.name = inputs["name"].value;
     dishToadd.image = inputs["image"].value;
     dishToadd.type = inputs["type"].value;
     dishToadd.price = inputs["price"].value;
-    dishToadd.active=true;
-    if(inputs["description"].value!=''&&inputs["name"].value!='' &&inputs["image"].value!=''&&inputs["type"].value!=''&&inputs["price"].value!=0){
+    dishToadd.active = true;
+    if (
+      inputs["description"].value != "" &&
+      inputs["name"].value != "" &&
+      inputs["image"].value != "" &&
+      inputs["type"].value != "" &&
+      inputs["price"].value != 0
+    ) {
       setDishToSend(dishToadd);
     }
-    
-  }
+  };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     restaurants.forEach((restaurant) => {
@@ -104,15 +113,14 @@ const NewModal: React.FC<ModalProps> = ({ inputArrays }) => {
       }
     });
   };
-  
 
   const sendAddReq = () => {
     console.log(dishToSend);
-    dishToSend.restaurant=currency;
-    debugger;
+    dishToSend.restaurant = currency;
     addDishData(dishToSend).then((res) => {
       console.log(res.data);
     });
+    handleClose();
   };
   return (
     <div>
@@ -132,19 +140,20 @@ const NewModal: React.FC<ModalProps> = ({ inputArrays }) => {
             noValidate
             autoComplete="off"
           >
-            {restaurants.length && inputArrays.map((input: string, index) => (
-              <TextField
-              key={index}
-              onChange={handleInputsChange}
-              id={input}
-              className={input}
-              label={input}
-              variant="outlined"
-              defaultValue={inputs[input].value}
-              autoComplete="true"
-              title={input}
-              />
-            ))}
+            {restaurants.length &&
+              inputArrays.map((input: string, index) => (
+                <TextField
+                  key={index}
+                  onChange={handleInputsChange}
+                  id={input}
+                  className={input}
+                  label={input}
+                  variant="outlined"
+                  defaultValue={inputs[input].value}
+                  autoComplete="true"
+                  title={input}
+                />
+              ))}
             {restaurants.length && (
               <TextField
                 id="outlined-select-currency-native"
@@ -164,7 +173,7 @@ const NewModal: React.FC<ModalProps> = ({ inputArrays }) => {
               </TextField>
             )}
           </Box>
-          <Button onClick={()=>sendAddReq()}>Add</Button>
+          <Button onClick={() => sendAddReq()}>Add</Button>
         </Box>
       </Modal>
     </div>

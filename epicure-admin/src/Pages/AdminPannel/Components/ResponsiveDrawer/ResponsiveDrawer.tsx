@@ -18,6 +18,7 @@ import Typography from "@mui/material/Typography";
 import AdminTable from "../Table/Table";
 import DishesPannel from "../DishesPannel/DishesPannel";
 import { Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -30,18 +31,24 @@ interface Props {
 }
 
 const ResponsiveDrawer = (props: Props) => {
+  let navigate=useNavigate();
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+  const logOut=()=>{
+    localStorage.removeItem('token');
+    navigate("/");
+
+  }
 
   const drawer = (
     <div>
       <Toolbar />
       <Divider />
-      <Button className="log-out-buttom">Log Out</Button>
+      <Button className="log-out-buttom" onClick={logOut}>Log Out</Button>
       <Divider />
       <List>
         {["Dishes", "Restaurants", "Chefs"].map((text, index) => (

@@ -8,7 +8,7 @@ import SingIn from "./Pages/SingIn/SingIn";
 import Footer from "./Components/Footer/Footer";
 import ResponsiveDrawer from "./Pages/AdminPannel/Components/ResponsiveDrawer/ResponsiveDrawer";
 import SingUp from "./Pages/SingUp/SingUp";
-
+const token=localStorage.getItem('token')
 function App() {
   return (
     <div className="app">
@@ -16,7 +16,7 @@ function App() {
       <Router>
         <Routes>
           <Route index element={<SingIn />}></Route>
-          <Route path="/admin" element={<ResponsiveDrawer />}></Route>
+          <Route path="/admin" element={token&&<ResponsiveDrawer />}></Route>
           <Route path="/SingUp" element={<SingUp />}></Route>
         </Routes>
       </Router>
