@@ -13,6 +13,7 @@ import { Select } from "@mui/material";
 import { SingleRestaurant } from "../../Assets/Interfaces/SingleRestaurant";
 import { Label } from "@mui/icons-material";
 import { ChangeEventHandler } from "react";
+import toast, { Toaster } from "react-hot-toast";
 
 const ariaLabel = { "aria-label": "description" };
 
@@ -48,7 +49,8 @@ const EditModal: React.FC<ModalProps> = ({ inputArrays, dishToUpdate }) => {
   const [open, setOpen] = React.useState(true);
   const [submit, setSubmit] = useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {setOpen(false);
+    setSubmit(prevState=>!prevState)};
   const allRestauranrs: SingleRestaurant[] = [];
   const [restaurants, setRestaurants] = useState(allRestauranrs);
   useEffect(() => {
@@ -68,32 +70,39 @@ const EditModal: React.FC<ModalProps> = ({ inputArrays, dishToUpdate }) => {
     });
   };
   const handleInputsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-   event.target.labels?.forEach(label => {
-     const data=label.attributes.getNamedItem('for')?.nodeValue;
-     let test="";
-     if(data){
-       test=data;
-     }
-     inputs[test].value=event.target.value;
-   });
-    
+    event.target.labels?.forEach((label) => {
+      const data = label.attributes.getNamedItem("for")?.nodeValue;
+      let test = "";
+      if (data) {
+        test = data;
+      }
+      inputs[test].value = event.target.value;
+    });
   };
 
   const sendUpdateReq = (inputs: any) => {
-    dishToUpdate.description=inputs["description"].value;
-    dishToUpdate.name=inputs["name"].value;
-    dishToUpdate.image=inputs["image"].value;
-    dishToUpdate.type=inputs["type"].value;
-    dishToUpdate.price=inputs["price"].value;
-    updateDishData(dishToUpdate._id,dishToUpdate).then((res) => {
+    dishToUpdate.description = inputs["description"].value;
+    dishToUpdate.name = inputs["name"].value;
+    dishToUpdate.image = inputs["image"].value;
+    dishToUpdate.type = inputs["type"].value;
+    dishToUpdate.price = inputs["price"].value;
+    updateDishData(dishToUpdate._id, dishToUpdate).then((res) => {
       console.log(res.data);
+      if (res.status == "Success") {
+        toast.success("Edit Successfully");
+      } else {
+        toast.error("Check Your inputs");
+      }
     });
+    setSubmit(prevState=>!prevState);
     handleClose();
-
+   // setTimeout(() => window.location.reload(), 1000);
   };
   
+
   return (
     <div>
+      <Toaster />
       <Modal
         open={open}
         onClose={handleClose}

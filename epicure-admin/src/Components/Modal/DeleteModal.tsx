@@ -5,9 +5,9 @@ import Modal from "@mui/material/Modal";
 import { SingleDish } from "../../Assets/Interfaces/SingleDish";
 import { useEffect } from "react";
 import { useState } from "react";
-import { getResturantsData, updateDishData } from "../../services/api-services";
-import { SingleRestaurant } from "../../Assets/Interfaces/SingleRestaurant";
-import './DeleteModal.scss'
+import { updateDishData } from "../../services/api-services";
+import toast, { Toaster } from "react-hot-toast";
+import "./DeleteModal.scss";
 const ariaLabel = { "aria-label": "description" };
 
 const style = {
@@ -36,21 +36,21 @@ const DeleteModal: React.FC<ModalProps> = ({ dishToDelete }) => {
     updateDishData(dishToDelete._id, dishToDelete);
   }, [submit]);
 
-
   const sendDeleteReq = (command: boolean) => {
-      if(command){
-        dishToDelete.active=false;
-        setSubmit(command);
-        setOpen(!command);
-      }
-      else{
-        setOpen(command);
-      }
-
+    if (command) {
+      dishToDelete.active = false;
+      setSubmit(command);
+      setOpen(!command);
+      toast.success("Deleted Successfully")
+      setTimeout(() => window.location.reload(), 1000);
+    } else {
+      setOpen(command);
+    }
   };
 
   return (
     <div>
+      <Toaster/>
       <Modal
         open={open}
         onClose={handleClose}

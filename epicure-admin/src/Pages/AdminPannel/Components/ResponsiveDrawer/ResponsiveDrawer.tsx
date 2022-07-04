@@ -46,8 +46,7 @@ const ResponsiveDrawer = (props: Props) => {
 
   const drawer = (
     <div>
-      <Toolbar />
-      <Divider />
+      <Toolbar sx={{backgroundColor:'primary'}} /> <Divider />
       <Button className="log-out-buttom" onClick={logOut}>Log Out</Button>
       <Divider />
       <List>

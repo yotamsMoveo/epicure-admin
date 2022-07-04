@@ -1,21 +1,14 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import Input from "@mui/material/Input";
-import { SingleDish } from "../../Assets/Interfaces/SingleDish";
 import { useEffect } from "react";
 import { useState } from "react";
-import {
-  addDishData,
-  getResturantsData,
-  updateDishData,
-} from "../../services/api-services";
+import { addDishData, getResturantsData } from "../../services/api-services";
 import TextField from "@mui/material/TextField";
-import { Select } from "@mui/material";
 import { SingleRestaurant } from "../../Assets/Interfaces/SingleRestaurant";
 import "../Modal/NewModal.scss";
+import toast, { Toaster } from "react-hot-toast";
 
 const ariaLabel = { "aria-label": "description" };
 
@@ -38,6 +31,7 @@ export interface ModalProps {
 const NewModal: React.FC<ModalProps> = ({ inputArrays }) => {
   const [open, setOpen] = React.useState(true);
   const [submit, setSubmit] = useState(false);
+  const [price, setPrice] = useState(0);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const allRestauranrs: SingleRestaurant[] = [];
@@ -45,13 +39,14 @@ const NewModal: React.FC<ModalProps> = ({ inputArrays }) => {
   interface input {
     value: any;
   }
-  const inputs: { [key: string]: input } = {};
+  let inputs: { [key: string]: input } = {};
   inputs["name"] = { value: "" };
   inputs["image"] = { value: "" };
   inputs["type"] = { value: "" };
   inputs["description"] = { value: "" };
   inputs["price"] = { value: 0 };
   inputs["restaurant"] = { value: "" };
+  let inputs1: { [key: string]: input } = {};
 
   useEffect(() => {
     getResturantsData().then((res) => {
@@ -93,14 +88,13 @@ const NewModal: React.FC<ModalProps> = ({ inputArrays }) => {
     dishToadd.name = inputs["name"].value;
     dishToadd.image = inputs["image"].value;
     dishToadd.type = inputs["type"].value;
-    dishToadd.price = inputs["price"].value;
     dishToadd.active = true;
+
     if (
       inputs["description"].value != "" &&
       inputs["name"].value != "" &&
       inputs["image"].value != "" &&
-      inputs["type"].value != "" &&
-      inputs["price"].value != 0
+      inputs["type"].value != ""
     ) {
       setDishToSend(dishToadd);
     }
@@ -113,17 +107,30 @@ const NewModal: React.FC<ModalProps> = ({ inputArrays }) => {
       }
     });
   };
-
+  let status = "";
   const sendAddReq = () => {
-    console.log(dishToSend);
     dishToSend.restaurant = currency;
+    dishToSend.price = price;
     addDishData(dishToSend).then((res) => {
-      console.log(res.data);
+      if(res.status=="Success"){
+        toast.success("Add Successfully")
+      }
+      else{
+        toast.error("Check Your inputs")
+      }
     });
     handleClose();
+    setTimeout(()=>window.location.reload(),1000);
+    console.log(status);
+  };
+
+  const changePrice = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value: number = +event.target.value;
+    setPrice(value);
   };
   return (
     <div>
+      <Toaster/>
       <Modal
         open={open}
         onClose={handleClose}
@@ -154,6 +161,12 @@ const NewModal: React.FC<ModalProps> = ({ inputArrays }) => {
                   title={input}
                 />
               ))}
+            <TextField
+              id="outlined-select-currency-native"
+              label="Price"
+              value={price}
+              onChange={changePrice}
+            ></TextField>
             {restaurants.length && (
               <TextField
                 id="outlined-select-currency-native"

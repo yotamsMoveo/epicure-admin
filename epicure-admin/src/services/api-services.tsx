@@ -50,7 +50,6 @@ export async function updateDishData(
 ): Promise<any> {
   const url = "http://localhost:8000/api/Dishes/" + dish_id;
   const yy=JSON.stringify({dishDataTOUpdate})
-  console.log(yy);
   const response = await fetch(url, {
     method: "PATCH",
     body: yy,
@@ -70,7 +69,6 @@ export async function addDishData(
 ): Promise<any> {
   const url = "http://localhost:8000/api/Dishes/" ;
   const yy=JSON.stringify({dishDataTOAdd})
-  console.log(yy);
   const response = await fetch(url, {
     method: "POST",
     body: yy,

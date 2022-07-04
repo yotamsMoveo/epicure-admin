@@ -34,6 +34,7 @@ const AdminTable: React.FC<TableProps> = ({ Array, Title, Culomns }) => {
   const deleteRow=(currentDish:SingleDish)=>{
     setDish(currentDish);
     setIsDeleteOpen(prevState=>!prevState);
+    
   }
   const openNewModal = () => {
     //setDish(currentDish)
@@ -63,7 +64,7 @@ const AdminTable: React.FC<TableProps> = ({ Array, Title, Culomns }) => {
   }
   const [dish,setDish]=useState(dishToEdit);
   const inputsForEdit=['name','image','type','description','price'];
-  const inputsForNew=['name','image','type','description','price'];
+  const inputsForNew=['name','image','type','description'];
   return (
     <div>
       <div className="admin-header"><h1>{Title}</h1>
