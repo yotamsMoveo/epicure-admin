@@ -11,6 +11,7 @@ import "../Modal/NewModal.scss";
 import toast, { Toaster } from "react-hot-toast";
 import { FormGroup, FormControlLabel, Checkbox } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { SingleDish } from "../../Assets/Interfaces/SingleDish";
 
 const ariaLabel = { "aria-label": "description" };
 
@@ -31,7 +32,7 @@ export interface ModalProps {
 }
 
 const NewModal: React.FC<ModalProps> = ({ inputArrays }) => {
-  let navigate=useNavigate();
+  let navigate = useNavigate();
   const [open, setOpen] = React.useState(true);
   const [submit, setSubmit] = useState(false);
   const [price, setPrice] = useState(0);
@@ -50,12 +51,12 @@ const NewModal: React.FC<ModalProps> = ({ inputArrays }) => {
   types["veg"] = { value: "https://svgshare.com/i/i4i.svg" };
   types["vej"] = { value: "" };
   let inputs: { [key: string]: input } = {};
+  const [name, setName] = useState("");
+  const [image, setImage] = useState("");
+  const [description, setDescription] = useState("");
   inputs["name"] = { value: "" };
   inputs["image"] = { value: "" };
-  inputs["type"] = { value: "" };
   inputs["description"] = { value: "" };
-  inputs["price"] = { value: 0 };
-  inputs["restaurant"] = { value: "" };
   let inputs1: { [key: string]: input } = {};
   const [spicy, setSpicy] = React.useState(false);
   const [veg, setVeg] = React.useState(false);
@@ -77,13 +78,14 @@ const NewModal: React.FC<ModalProps> = ({ inputArrays }) => {
     active: true,
   };
   let dishToadd: any = {
-    image: "string",
-    name: "string",
-    description: "string",
-    type: ["string"],
-    price: "4",
-    dish_time: "string",
+    image: "",
+    name: "",
+    description: "",
+    type: [""],
+    price: 4,
+    dish_time: "",
     restaurant: rest,
+    active: true
   };
   const [dishToSend, setDishToSend] = useState(dishToadd);
   const [currency, setCurrency] = useState(rest);
@@ -91,22 +93,20 @@ const NewModal: React.FC<ModalProps> = ({ inputArrays }) => {
     event.target.labels?.forEach((label) => {
       const data = label.attributes.getNamedItem("for")?.nodeValue;
       let test = "";
-      if (data) {
-        test = data;
-      }
-      inputs[test].value = event.target.value;
-    });
-    dishToadd.description = inputs["description"].value;
-    dishToadd.name = inputs["name"].value;
-    dishToadd.image = inputs["image"].value;
-    dishToadd.type = inputs["type"].value;
-    dishToadd.active = true;
 
+      if (data == "name") {
+        setName(event.target.value);
+      } else if (data == "image") {
+        setImage(event.target.value);
+      } else if (data == "description") {
+        setDescription(event.target.value);
+      }
+    });
+    dishToadd.active = true;
     if (
-      inputs["description"].value != "" &&
-      inputs["name"].value != "" &&
-      inputs["image"].value != "" &&
-      inputs["type"].value != ""
+      dishToadd.description != "" &&
+      dishToadd.name != "" &&
+      dishToadd.image != ""
     ) {
       setDishToSend(dishToadd);
     }
@@ -119,8 +119,12 @@ const NewModal: React.FC<ModalProps> = ({ inputArrays }) => {
       }
     });
   };
-  let status = "";
+
   const sendAddReq = () => {
+   
+    dishToSend.name=name;
+    dishToSend.image=image;
+    dishToSend.description=description;
     dishToSend.type.splice(0);
     if (spicy) {
       dishToSend.type.push(types["spicy"].value);
@@ -133,6 +137,7 @@ const NewModal: React.FC<ModalProps> = ({ inputArrays }) => {
     }
     dishToSend.restaurant = currency;
     dishToSend.price = price;
+    debugger;
     addDishData(dishToSend).then((res) => {
       if (res.status == "Success") {
         toast.success("Add Successfully");
@@ -140,9 +145,8 @@ const NewModal: React.FC<ModalProps> = ({ inputArrays }) => {
         toast.error("Check Your inputs");
       }
     });
-    setTimeout(()=>navigate("/admin"),1000);
+    setTimeout(() => navigate("/admin"), 1000);
     handleClose();
-    console.log(status);
   };
 
   const changePrice = (event: React.ChangeEvent<HTMLInputElement>) => {

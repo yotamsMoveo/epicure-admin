@@ -11,7 +11,7 @@ const DishesPannel=()=>{
       getBestDishesData().then((res) => {
         setBestDishes(res.data);
       });
-    }, []);
+    }, [bestDishes]);
     const title="Dishes Pannel";
 
     return(<div>

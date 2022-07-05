@@ -67,7 +67,8 @@ export async function updateDishData(
 export async function addDishData(
   dishDataTOAdd: SingleDish
 ): Promise<any> {
-  const url = "http://3.85.131.215/api/Dishes/" ;
+  debugger;
+  const url = "http://localhost:8000/api/Dishes/" ;
   const yy=JSON.stringify({dishDataTOAdd})
   const response = await fetch(url, {
     method: "POST",
