@@ -27,20 +27,19 @@ const AdminTable: React.FC<TableProps> = ({ Array, Title, Culomns }) => {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isNewOpen, setIsNewOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-  const openEtidModal = (currentDish:SingleDish) => {
-    setDish(currentDish)
-    setIsEditOpen(prevState=>!prevState)
-  };
-  const deleteRow=(currentDish:SingleDish)=>{
+  const openEtidModal = (currentDish: SingleDish) => {
     setDish(currentDish);
-    setIsDeleteOpen(prevState=>!prevState);
-    
-  }
+    setIsEditOpen((prevState) => !prevState);
+  };
+  const deleteRow = (currentDish: SingleDish) => {
+    setDish(currentDish);
+    setIsDeleteOpen((prevState) => !prevState);
+  };
   const openNewModal = () => {
     //setDish(currentDish)
-    setIsNewOpen(prevState=>!prevState)
+    setIsNewOpen((prevState) => !prevState);
   };
-  let rest:SingleRestaurant={
+  let rest: SingleRestaurant = {
     image: "string",
     name: "string",
     chef_name: "string",
@@ -48,29 +47,32 @@ const AdminTable: React.FC<TableProps> = ({ Array, Title, Culomns }) => {
     open_date: "string",
     rating: 0,
     open_hour: 0,
-    _id:"string",
-    active:true
-  }
-  let dishToEdit:SingleDish={
-    image: "string" ,
-    name: "string" ,
-    description: "string" ,
-    type: "string" ,
+    _id: "string",
+    active: true,
+  };
+  let dishToEdit: SingleDish = {
+    image: "string",
+    name: "string",
+    description: "string",
+    type: ["string"],
     price: 7,
-    restaurant:rest, 
+    restaurant: rest,
     _id: "0",
-    dish_time:"string",
-    active:true
-  }
-  const [dish,setDish]=useState(dishToEdit);
-  const inputsForEdit=['name','image','type','description','price'];
-  const inputsForNew=['name','image','type','description'];
+    dish_time: "string",
+    active: true,
+  };
+  const [dish, setDish] = useState(dishToEdit);
+  const inputsForEdit = ["name", "image", "description", "price"];
+  const inputsForNew = ["name", "image", "description"];
   return (
     <div>
-      <div className="admin-header"><h1>{Title}</h1>
-      <Button className="admin-header-button" onClick={()=>openNewModal()}>Add</Button>
+      <div className="admin-header">
+        <h1>{Title}</h1>
+        <Button className="admin-header-button" onClick={() => openNewModal()}>
+          Add
+        </Button>
       </div>
-      
+
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
@@ -92,12 +94,18 @@ const AdminTable: React.FC<TableProps> = ({ Array, Title, Culomns }) => {
                 <TableCell align="left">
                   <img className="table-image" src={currentDish.image} />
                 </TableCell>
-                <TableCell align="left">
-                  <img className="table-image" src={currentDish.type} />
+                <TableCell align="left" >
+                  <div className="types-array">
+                    {currentDish.type.map((type) => (
+                      <img className="table-type-image" src={type} />
+                    ))}
+                  </div>
                 </TableCell>
                 <TableCell align="left">{currentDish.description}</TableCell>
                 <TableCell align="left">{currentDish.price}</TableCell>
-                <TableCell align="left">{currentDish.restaurant.name}</TableCell>
+                <TableCell align="left">
+                  {currentDish.restaurant.name}
+                </TableCell>
                 <TableCell align="left">
                   <IconButton
                     size="large"
@@ -105,7 +113,7 @@ const AdminTable: React.FC<TableProps> = ({ Array, Title, Culomns }) => {
                     color="inherit"
                     aria-label="menu"
                     sx={{ mr: 2 }}
-                    onClick={()=>deleteRow(currentDish)}
+                    onClick={() => deleteRow(currentDish)}
                   >
                     <DeleteIcon />
                   </IconButton>
@@ -128,8 +136,10 @@ const AdminTable: React.FC<TableProps> = ({ Array, Title, Culomns }) => {
           </TableBody>
         </Table>
       </TableContainer>
-      {isEditOpen && <EditModal inputArrays={inputsForEdit} dishToUpdate={dish} />}
-      {isNewOpen && <NewModal inputArrays={inputsForNew}  />}
+      {isEditOpen && (
+        <EditModal inputArrays={inputsForEdit} dishToUpdate={dish} />
+      )}
+      {isNewOpen && <NewModal inputArrays={inputsForNew} />}
       {isDeleteOpen && <DeleteModal dishToDelete={dish} />}
     </div>
   );

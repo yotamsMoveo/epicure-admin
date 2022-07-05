@@ -1,6 +1,7 @@
 {
   "name": "epicure-admin",
   "version": "0.1.0",
+  "homepage": ".",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.9.3",
@@ -29,7 +30,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "scp -r -i epicure-yotam.pem ./build/* ubuntu@3.85.131.215:/home/ubuntu/epicure-admin/build"
+    
   },
   "eslintConfig": {
     "extends": [

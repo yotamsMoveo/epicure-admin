@@ -9,6 +9,7 @@ import TextField from "@mui/material/TextField";
 import { SingleRestaurant } from "../../Assets/Interfaces/SingleRestaurant";
 import "../Modal/NewModal.scss";
 import toast, { Toaster } from "react-hot-toast";
+import { FormGroup, FormControlLabel, Checkbox } from "@mui/material";
 
 const ariaLabel = { "aria-label": "description" };
 
@@ -39,6 +40,13 @@ const NewModal: React.FC<ModalProps> = ({ inputArrays }) => {
   interface input {
     value: any;
   }
+  interface types {
+    value: any;
+  }
+  const types: { [key: string]: types } = {};
+  types["spicy"] = { value: "https://svgshare.com/i/i45.svg" };
+  types["veg"] = { value: "https://svgshare.com/i/i4i.svg" };
+  types["vej"] = { value: "" };
   let inputs: { [key: string]: input } = {};
   inputs["name"] = { value: "" };
   inputs["image"] = { value: "" };
@@ -47,7 +55,9 @@ const NewModal: React.FC<ModalProps> = ({ inputArrays }) => {
   inputs["price"] = { value: 0 };
   inputs["restaurant"] = { value: "" };
   let inputs1: { [key: string]: input } = {};
-
+  const [spicy, setSpicy] = React.useState(false);
+  const [veg, setVeg] = React.useState(false);
+  const [vej, setVej] = React.useState(false);
   useEffect(() => {
     getResturantsData().then((res) => {
       setRestaurants(res.data);
@@ -68,7 +78,7 @@ const NewModal: React.FC<ModalProps> = ({ inputArrays }) => {
     image: "string",
     name: "string",
     description: "string",
-    type: "string",
+    type: ["string"],
     price: "4",
     dish_time: "string",
     restaurant: rest,
@@ -109,18 +119,27 @@ const NewModal: React.FC<ModalProps> = ({ inputArrays }) => {
   };
   let status = "";
   const sendAddReq = () => {
+    dishToSend.type.splice(0);
+    if (spicy) {
+      dishToSend.type.push(types["spicy"].value);
+    }
+    if (veg) {
+      dishToSend.type.push(types["veg"].value);
+    }
+    if (vej) {
+      dishToSend.type.push(types["vej"].value);
+    }
     dishToSend.restaurant = currency;
     dishToSend.price = price;
     addDishData(dishToSend).then((res) => {
-      if(res.status=="Success"){
-        toast.success("Add Successfully")
-      }
-      else{
-        toast.error("Check Your inputs")
+      if (res.status == "Success") {
+        toast.success("Add Successfully");
+      } else {
+        toast.error("Check Your inputs");
       }
     });
     handleClose();
-    setTimeout(()=>window.location.reload(),1000);
+    setTimeout(() => window.location.reload(), 1000);
     console.log(status);
   };
 
@@ -130,7 +149,7 @@ const NewModal: React.FC<ModalProps> = ({ inputArrays }) => {
   };
   return (
     <div>
-      <Toaster/>
+      <Toaster />
       <Modal
         open={open}
         onClose={handleClose}
@@ -167,6 +186,38 @@ const NewModal: React.FC<ModalProps> = ({ inputArrays }) => {
               value={price}
               onChange={changePrice}
             ></TextField>
+
+            <FormGroup>
+              <div className="types-array">
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={spicy}
+                      onChange={() => setSpicy((prevState) => !prevState)}
+                    />
+                  }
+                  label="Spicy"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={veg}
+                      onChange={() => setVeg((prevState) => !prevState)}
+                    />
+                  }
+                  label="Vegan"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={vej}
+                      onChange={() => setVej((prevState) => !prevState)}
+                    />
+                  }
+                  label="Vej"
+                />
+              </div>
+            </FormGroup>
             {restaurants.length && (
               <TextField
                 id="outlined-select-currency-native"

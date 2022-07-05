@@ -40,7 +40,7 @@ const ResponsiveDrawer = (props: Props) => {
   };
   const logOut=()=>{
     localStorage.removeItem('token');
-    navigate("/");
+    navigate("/login");
 
   }
 

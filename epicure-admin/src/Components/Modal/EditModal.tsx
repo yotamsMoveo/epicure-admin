@@ -9,7 +9,7 @@ import { ChangeEvent, useEffect } from "react";
 import { useState } from "react";
 import { getResturantsData, updateDishData } from "../../services/api-services";
 import TextField from "@mui/material/TextField";
-import { Select } from "@mui/material";
+import { Checkbox, FormControlLabel, FormGroup, Select } from "@mui/material";
 import { SingleRestaurant } from "../../Assets/Interfaces/SingleRestaurant";
 import { Label } from "@mui/icons-material";
 import { ChangeEventHandler } from "react";
@@ -38,19 +38,46 @@ const EditModal: React.FC<ModalProps> = ({ inputArrays, dishToUpdate }) => {
   interface input {
     value: any;
   }
+  interface types {
+    value: any;
+  }
   const inputs: { [key: string]: input } = {};
+  const types: { [key: string]: types } = {};
+  types["spicy"] = { value: "https://svgshare.com/i/i45.svg" };
+  types["veg"] = { value: "https://svgshare.com/i/i4i.svg" };
+  types["vej"] = { value: "" };
+  let isSpicy = false;
+  let isVeg = false;
+  let isVej = false;
+  dishToUpdate.type.forEach((type) => {
+    if (types["spicy"].value == type) {
+      isSpicy = true;
+    }
+    if (types["veg"].value == type) {
+      isVeg = true;
+    }
+    if (types["vej"].value == type) {
+      isVej = true;
+    }
+  });
   inputs["name"] = { value: dishToUpdate.name };
   inputs["image"] = { value: dishToUpdate.image };
   inputs["type"] = { value: dishToUpdate.type };
   inputs["description"] = { value: dishToUpdate.description };
   inputs["price"] = { value: dishToUpdate.price };
   inputs["restaurant"] = { value: dishToUpdate.restaurant.name };
-
+  const [spicy, setSpicy] = React.useState(isSpicy);
+  const [veg, setVeg] = React.useState(isVeg);
+  const [vej, setVej] = React.useState(isVej);
   const [open, setOpen] = React.useState(true);
   const [submit, setSubmit] = useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => {setOpen(false);
-    setSubmit(prevState=>!prevState)};
+
+  const handleClose = () => {
+    setOpen(false);
+    setSubmit((prevState) => !prevState);
+  };
+
   const allRestauranrs: SingleRestaurant[] = [];
   const [restaurants, setRestaurants] = useState(allRestauranrs);
   useEffect(() => {
@@ -81,6 +108,16 @@ const EditModal: React.FC<ModalProps> = ({ inputArrays, dishToUpdate }) => {
   };
 
   const sendUpdateReq = (inputs: any) => {
+    dishToUpdate.type.splice(0);
+    if (spicy) {
+      dishToUpdate.type.push(types["spicy"].value);
+    }
+    if (veg) {
+      dishToUpdate.type.push(types["veg"].value);
+    }
+    if (vej) {
+      dishToUpdate.type.push(types["vej"].value);
+    }
     dishToUpdate.description = inputs["description"].value;
     dishToUpdate.name = inputs["name"].value;
     dishToUpdate.image = inputs["image"].value;
@@ -94,11 +131,10 @@ const EditModal: React.FC<ModalProps> = ({ inputArrays, dishToUpdate }) => {
         toast.error("Check Your inputs");
       }
     });
-    setSubmit(prevState=>!prevState);
+    setSubmit((prevState) => !prevState);
     handleClose();
-   // setTimeout(() => window.location.reload(), 1000);
+    // setTimeout(() => window.location.reload(), 1000);
   };
-  
 
   return (
     <div>
@@ -132,6 +168,37 @@ const EditModal: React.FC<ModalProps> = ({ inputArrays, dishToUpdate }) => {
                 title={input}
               />
             ))}
+            <FormGroup >
+              <div className="types-array">
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={spicy}
+                      onChange={() => setSpicy((prevState) => !prevState)}
+                    />
+                  }
+                  label="Spicy"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={veg}
+                      onChange={() => setVeg((prevState) => !prevState)}
+                    />
+                  }
+                  label="Vegan"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={vej}
+                      onChange={() => setVej((prevState) => !prevState)}
+                    />
+                  }
+                  label="Vej"
+                />
+              </div>
+            </FormGroup>
             {restaurants.length && (
               <TextField
                 id="outlined-select-currency-native"

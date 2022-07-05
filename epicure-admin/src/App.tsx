@@ -15,7 +15,7 @@ function App() {
       <Navbar />
       <Router>
         <Routes>
-          <Route index element={<SingIn />}></Route>
+          <Route path="/login" element={<SingIn />}></Route>
           <Route path="/admin" element={token&&<ResponsiveDrawer />}></Route>
           <Route path="/SingUp" element={<SingUp />}></Route>
         </Routes>

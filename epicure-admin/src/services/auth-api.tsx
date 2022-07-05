@@ -5,7 +5,7 @@ import { SingleDish } from "../Assets/Interfaces/SingleDish";
 export async function registerReq(
     userData:any
   ): Promise<any> {
-    const url = "http://localhost:8000/api/validation/register" ;
+    const url = "http://3.85.131.215/api/validation/register" ;
     const yy=JSON.stringify({userData})
     console.log(yy);
     const response = await fetch(url, {
@@ -23,7 +23,7 @@ export async function registerReq(
   export async function loginReq(
     userData:any
   ): Promise<any> {
-    const url = "http://localhost:8000/api/validation/login" ;
+    const url = "http://3.85.131.215/api/validation/login" ;
     const yy=JSON.stringify({userData})
     console.log(yy);
     const response = await fetch(url, {

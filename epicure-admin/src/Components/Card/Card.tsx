@@ -11,6 +11,7 @@ import "./Card.scss";
 import { useState } from "react";
 import { AdminUser } from "../../Assets/Admin";
 import { loginReq, registerReq } from "../../services/auth-api";
+import { useNavigate } from "react-router-dom";
 
 const bull = (
   <Box
@@ -26,6 +27,7 @@ export interface BasicCardProps {
 }
 
 const BasicCard: React.FC<BasicCardProps> = ({ InputsArray, Title }) => {
+  let navigate=useNavigate();
   let user: AdminUser = {
     password: "",
     email: "",
@@ -87,7 +89,7 @@ const BasicCard: React.FC<BasicCardProps> = ({ InputsArray, Title }) => {
         console.log(res);
         if(res.token){
           localStorage.setItem('token', res.token);
-          window.location.href='/admin';
+          navigate("/admin");
         }else{
           console.log('err')
         }

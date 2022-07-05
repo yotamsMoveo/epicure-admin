@@ -4,7 +4,7 @@ export interface SingleDish {
     image: string ;
     name: string ;
     description: string ;
-    type: string ;
+    type: string[] ;
     price: number;
     restaurant: SingleRestaurant ;
     _id: string;
