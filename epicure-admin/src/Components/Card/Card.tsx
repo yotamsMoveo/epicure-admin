@@ -120,6 +120,7 @@ const BasicCard: React.FC<BasicCardProps> = ({ InputsArray, Title }) => {
             variant="outlined"
             sx={{ backgroundColor: "white" }}
             required
+            autoComplete="off"
           />
         ))}
       </CardContent>
