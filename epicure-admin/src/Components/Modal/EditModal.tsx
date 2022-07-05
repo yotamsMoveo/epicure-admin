@@ -71,6 +71,10 @@ const EditModal: React.FC<ModalProps> = ({ inputArrays, dishToUpdate }) => {
   const [spicy, setSpicy] = React.useState(isSpicy);
   const [veg, setVeg] = React.useState(isVeg);
   const [vej, setVej] = React.useState(isVej);
+  const [name, setName] = React.useState(dishToUpdate.name);
+  const [image, setImage] = React.useState(dishToUpdate.image);
+  const [description, setDescription] = React.useState(dishToUpdate.description);
+  const [price, setPrice] = React.useState(dishToUpdate.price);
   const [open, setOpen] = React.useState(true);
   const [submit, setSubmit] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -102,10 +106,20 @@ const EditModal: React.FC<ModalProps> = ({ inputArrays, dishToUpdate }) => {
     event.target.labels?.forEach((label) => {
       const data = label.attributes.getNamedItem("for")?.nodeValue;
       let test = "";
-      if (data) {
-        test = data;
+      if (data=="name") {
+        setName(event.target.value);
       }
-      inputs[test].value = event.target.value;
+      else if (data=="image") {
+        setImage(event.target.value);
+      }
+      if (data=="description") {
+        setDescription(event.target.value);
+      }
+      if (data=="price") {
+        let newPrice:number =+ (event.target.value);
+        setPrice(newPrice);
+      }
+      //inputs[test].value = event.target.value;
     });
   };
 
@@ -120,11 +134,10 @@ const EditModal: React.FC<ModalProps> = ({ inputArrays, dishToUpdate }) => {
     if (vej) {
       dishToUpdate.type.push(types["vej"].value);
     }
-    dishToUpdate.description = inputs["description"].value;
-    dishToUpdate.name = inputs["name"].value;
-    dishToUpdate.image = inputs["image"].value;
-    dishToUpdate.type = inputs["type"].value;
-    dishToUpdate.price = inputs["price"].value;
+    dishToUpdate.description =description;
+    dishToUpdate.name = name;
+    dishToUpdate.image = image;
+    dishToUpdate.price = price;
     updateDishData(dishToUpdate._id, dishToUpdate).then((res) => {
       console.log(res.data);
       if (res.status == "Success") {
