@@ -10,6 +10,7 @@ import { SingleRestaurant } from "../../Assets/Interfaces/SingleRestaurant";
 import "../Modal/NewModal.scss";
 import toast, { Toaster } from "react-hot-toast";
 import { FormGroup, FormControlLabel, Checkbox } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const ariaLabel = { "aria-label": "description" };
 
@@ -30,6 +31,7 @@ export interface ModalProps {
 }
 
 const NewModal: React.FC<ModalProps> = ({ inputArrays }) => {
+  let navigate=useNavigate();
   const [open, setOpen] = React.useState(true);
   const [submit, setSubmit] = useState(false);
   const [price, setPrice] = useState(0);
@@ -138,8 +140,8 @@ const NewModal: React.FC<ModalProps> = ({ inputArrays }) => {
         toast.error("Check Your inputs");
       }
     });
+    setTimeout(()=>navigate("/admin"),1000);
     handleClose();
-    setTimeout(() => window.location.reload(), 1000);
     console.log(status);
   };
 

@@ -8,6 +8,7 @@ import { useState } from "react";
 import { updateDishData } from "../../services/api-services";
 import toast, { Toaster } from "react-hot-toast";
 import "./DeleteModal.scss";
+import { useNavigate } from "react-router-dom";
 const ariaLabel = { "aria-label": "description" };
 
 const style = {
@@ -27,6 +28,7 @@ export interface ModalProps {
 }
 
 const DeleteModal: React.FC<ModalProps> = ({ dishToDelete }) => {
+  let navigate = useNavigate();
   const [open, setOpen] = React.useState(true);
   const [submit, setSubmit] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -41,8 +43,8 @@ const DeleteModal: React.FC<ModalProps> = ({ dishToDelete }) => {
       dishToDelete.active = false;
       setSubmit(command);
       setOpen(!command);
-      toast.success("Deleted Successfully")
-      setTimeout(() => window.location.reload(), 1000);
+      toast.success("Deleted Successfully");
+      setTimeout(() => navigate("/admin"), 1000);
     } else {
       setOpen(command);
     }
@@ -50,7 +52,7 @@ const DeleteModal: React.FC<ModalProps> = ({ dishToDelete }) => {
 
   return (
     <div>
-      <Toaster/>
+      <Toaster />
       <Modal
         open={open}
         onClose={handleClose}

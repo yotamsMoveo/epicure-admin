@@ -14,6 +14,7 @@ import { SingleRestaurant } from "../../Assets/Interfaces/SingleRestaurant";
 import { Label } from "@mui/icons-material";
 import { ChangeEventHandler } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const ariaLabel = { "aria-label": "description" };
 
@@ -35,6 +36,7 @@ export interface ModalProps {
 }
 
 const EditModal: React.FC<ModalProps> = ({ inputArrays, dishToUpdate }) => {
+  let navigate=useNavigate();
   interface input {
     value: any;
   }
@@ -132,6 +134,7 @@ const EditModal: React.FC<ModalProps> = ({ inputArrays, dishToUpdate }) => {
       }
     });
     setSubmit((prevState) => !prevState);
+    setTimeout(()=>navigate("/admin"),1000);
     handleClose();
     // setTimeout(() => window.location.reload(), 1000);
   };
