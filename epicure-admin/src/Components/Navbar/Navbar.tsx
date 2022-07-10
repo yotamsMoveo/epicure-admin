@@ -28,14 +28,15 @@ const Navbar = () => {
             color="inherit"
             aria-label="menu"
             sx={{ mr: 2 }}
+            disabled
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            News
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} >
+            Epicure-Admin
           </Typography>
           <Button color="inherit" onClick={() => goTo(0)}>Login</Button>
-          <Button color="inherit" onClick={() => goTo(1)}>
+          <Button color="inherit" onClick={() => goTo(1)} disabled>
             Sing Up
           </Button>
         </Toolbar>
