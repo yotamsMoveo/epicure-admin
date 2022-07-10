@@ -62,6 +62,20 @@ const EditModal: React.FC<ModalProps> = ({ inputArrays, dishToUpdate }) => {
       isVej = true;
     }
   });
+  let isBreakfast = false;
+  let isDinner = false;
+  let isLanch = false;
+  dishToUpdate.dish_time.forEach((type) => {
+    if ("b"== type) {
+      isBreakfast = true;
+    }
+    if ("l" == type) {
+      isLanch = true;
+    }
+    if ("d" == type) {
+      isDinner = true;
+    }
+  });
   inputs["name"] = { value: dishToUpdate.name };
   inputs["image"] = { value: dishToUpdate.image };
   inputs["type"] = { value: dishToUpdate.type };
@@ -71,6 +85,9 @@ const EditModal: React.FC<ModalProps> = ({ inputArrays, dishToUpdate }) => {
   const [spicy, setSpicy] = React.useState(isSpicy);
   const [veg, setVeg] = React.useState(isVeg);
   const [vej, setVej] = React.useState(isVej);
+  const [breakfast, setBreakfast] = React.useState(isBreakfast);
+  const [lanch, setLanch] = React.useState(isLanch);
+  const [dinner, setDinner] = React.useState(isDinner);
   const [name, setName] = React.useState(dishToUpdate.name);
   const [image, setImage] = React.useState(dishToUpdate.image);
   const [description, setDescription] = React.useState(dishToUpdate.description);
@@ -134,6 +151,17 @@ const EditModal: React.FC<ModalProps> = ({ inputArrays, dishToUpdate }) => {
     if (vej) {
       dishToUpdate.type.push(types["vej"].value);
     }
+    dishToUpdate.dish_time.splice(0);
+    if (breakfast) {
+      dishToUpdate.dish_time.push("b");
+    }
+    if (lanch) {
+      dishToUpdate.dish_time.push("l");
+    }
+    if (dinner) {
+      dishToUpdate.dish_time.push("d");
+    }
+    dishToUpdate.restaurant=currency;
     dishToUpdate.description =description;
     dishToUpdate.name = name;
     dishToUpdate.image = image;
@@ -215,7 +243,39 @@ const EditModal: React.FC<ModalProps> = ({ inputArrays, dishToUpdate }) => {
                 />
               </div>
             </FormGroup>
-            {restaurants.length && (
+
+            <FormGroup >
+              <div className="types-array">
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={breakfast}
+                      onChange={() => setBreakfast((prevState) => !prevState)}
+                    />
+                  }
+                  label="Breakfast"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={lanch}
+                      onChange={() => setLanch((prevState) => !prevState)}
+                    />
+                  }
+                  label="Lanch"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={dinner}
+                      onChange={() => setDinner((prevState) => !prevState)}
+                    />
+                  }
+                  label="Dinner"
+                />
+              </div>
+            </FormGroup>
+            {restaurants.length ?(
               <TextField
                 id="outlined-select-currency-native"
                 select
@@ -232,7 +292,7 @@ const EditModal: React.FC<ModalProps> = ({ inputArrays, dishToUpdate }) => {
                   </option>
                 ))}
               </TextField>
-            )}
+            ):<div></div>}
           </Box>
           <Button onClick={() => sendUpdateReq(inputs)}>Submit</Button>
         </Box>

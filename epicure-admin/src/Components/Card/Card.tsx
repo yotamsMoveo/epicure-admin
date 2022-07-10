@@ -37,6 +37,8 @@ const BasicCard: React.FC<BasicCardProps> = ({ InputsArray, Title }) => {
     value: any;
   }
   const [userData, setUserData] = useState({user});
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
   const inputs: { [key: string]: input } = {};
   inputs["Password"] = { value: "" };
   inputs["Email"] = { value: "" };
@@ -75,6 +77,13 @@ const BasicCard: React.FC<BasicCardProps> = ({ InputsArray, Title }) => {
       }
     }
   };
+  const handlePasswordChange=(event: React.ChangeEvent<HTMLInputElement>)=>{
+    setPassword(event?.target.value);
+  }
+  const handleEmailChange=(event: React.ChangeEvent<HTMLInputElement>)=>{
+    setEmail(event?.target.value);
+  }
+  
 
   const sendSingUpeReq = () => {
     if(InputsArray.length==3){
@@ -84,7 +93,8 @@ const BasicCard: React.FC<BasicCardProps> = ({ InputsArray, Title }) => {
       })
     }
     else{
-      userData.user.password=inputs["Password"].value;
+      userData.user.password=password;
+      userData.user.email=email;
       loginReq(userData).then((res)=>{
         console.log(res);
         if(res.token){
@@ -96,8 +106,6 @@ const BasicCard: React.FC<BasicCardProps> = ({ InputsArray, Title }) => {
       })
       console.log(userData);
     }
-   
-    
   };
 
   return (
@@ -111,18 +119,26 @@ const BasicCard: React.FC<BasicCardProps> = ({ InputsArray, Title }) => {
     >
       <h1>{Title}</h1>
       <CardContent className="contant">
-        {InputsArray.map((input: string, index) => (
           <TextField
-            key={index}
-            onChange={handleInputsChange}
-            id={input}
-            label={input}
+            onChange={handleEmailChange}
+            id={"email"}
+            label={"Email"}
             variant="outlined"
             sx={{ backgroundColor: "white" }}
             required
             autoComplete="off"
           />
-        ))}
+
+        <TextField
+            onChange={handlePasswordChange}
+            id={"password"}
+            label={"Password"}
+            variant="outlined"
+            sx={{ backgroundColor: "white" }}
+            required
+            autoComplete="off"
+            type="password"
+          />
       </CardContent>
       <CardActions>
         <Button onClick={sendSingUpeReq}>Submit</Button>

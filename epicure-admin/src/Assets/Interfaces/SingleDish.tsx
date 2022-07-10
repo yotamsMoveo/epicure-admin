@@ -8,7 +8,7 @@ export interface SingleDish {
     price: number;
     restaurant: SingleRestaurant ;
     _id: string;
-    dish_time:string;
+    dish_time:string[];
     active:boolean;
   }
   

@@ -58,7 +58,7 @@ const AdminTable: React.FC<TableProps> = ({ Array, Title, Culomns }) => {
     price: 7,
     restaurant: rest,
     _id: "0",
-    dish_time: "string",
+    dish_time: ["string"],
     active: true,
   };
   const [dish, setDish] = useState(dishToEdit);
@@ -136,11 +136,11 @@ const AdminTable: React.FC<TableProps> = ({ Array, Title, Culomns }) => {
           </TableBody>
         </Table>
       </TableContainer>
-      {isEditOpen && (
+      {isEditOpen ? (
         <EditModal inputArrays={inputsForEdit} dishToUpdate={dish} />
-      )}
-      {isNewOpen && <NewModal inputArrays={inputsForNew} />}
-      {isDeleteOpen && <DeleteModal dishToDelete={dish} />}
+      ):<div></div>}
+      {isNewOpen ? <NewModal inputArrays={inputsForNew} />:<div></div>}
+      {isDeleteOpen ?<DeleteModal dishToDelete={dish} />:<div></div>}
     </div>
   );
 };

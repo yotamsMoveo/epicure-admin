@@ -15,7 +15,7 @@ const DishesPannel=()=>{
     const title="Dishes Pannel";
 
     return(<div>
-        {bestDishes.length&&<AdminTable Array={bestDishes} Title={title} Culomns={culomns}/>}
+        {bestDishes.length?<AdminTable Array={bestDishes} Title={title} Culomns={culomns}/>:<div></div>}
     </div>)
 }
 

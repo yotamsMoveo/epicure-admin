@@ -61,6 +61,10 @@ const NewModal: React.FC<ModalProps> = ({ inputArrays }) => {
   const [spicy, setSpicy] = React.useState(false);
   const [veg, setVeg] = React.useState(false);
   const [vej, setVej] = React.useState(false);
+  const [breakfast, setBreakfast] = React.useState(false);
+  const [lanch, setLanch] = React.useState(false);
+  const [dinner, setDinner] = React.useState(false);
+ 
   useEffect(() => {
     getResturantsData().then((res) => {
       setRestaurants(res.data);
@@ -83,9 +87,9 @@ const NewModal: React.FC<ModalProps> = ({ inputArrays }) => {
     description: "",
     type: [""],
     price: 4,
-    dish_time: "",
+    dish_time: [""],
     restaurant: rest,
-    active: true
+    active: true,
   };
   const [dishToSend, setDishToSend] = useState(dishToadd);
   const [currency, setCurrency] = useState(rest);
@@ -135,6 +139,16 @@ const NewModal: React.FC<ModalProps> = ({ inputArrays }) => {
     if (vej) {
       dishToSend.type.push(types["vej"].value);
     }
+    dishToSend.dish_time.splice(0);
+    if (breakfast) {
+      dishToSend.dish_time.push("b");
+    }
+    if (veg) {
+      dishToSend.dish_time.push("l");
+    }
+    if (vej) {
+      dishToSend.dish_time.push("d");
+    }
     dishToSend.restaurant = currency;
     dishToSend.price = price;
     debugger;
@@ -172,7 +186,7 @@ const NewModal: React.FC<ModalProps> = ({ inputArrays }) => {
             noValidate
             autoComplete="off"
           >
-            {restaurants.length &&
+            {restaurants.length ?
               inputArrays.map((input: string, index) => (
                 <TextField
                   key={index}
@@ -185,7 +199,7 @@ const NewModal: React.FC<ModalProps> = ({ inputArrays }) => {
                   autoComplete="true"
                   title={input}
                 />
-              ))}
+              )):<div></div>}
             <TextField
               id="outlined-select-currency-native"
               label="Price"
@@ -224,7 +238,39 @@ const NewModal: React.FC<ModalProps> = ({ inputArrays }) => {
                 />
               </div>
             </FormGroup>
-            {restaurants.length && (
+            <FormGroup >
+              <div className="types-array">
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={breakfast}
+                      onChange={() => setBreakfast((prevState) => !prevState)}
+                    />
+                  }
+                  label="Breakfast"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={lanch}
+                      onChange={() => setLanch((prevState) => !prevState)}
+                    />
+                  }
+                  label="Lanch"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={dinner}
+                      onChange={() => setDinner((prevState) => !prevState)}
+                    />
+                  }
+                  label="Dinner"
+                />
+              </div>
+            </FormGroup>
+           
+            {restaurants.length ? (
               <TextField
                 id="outlined-select-currency-native"
                 select
@@ -241,7 +287,7 @@ const NewModal: React.FC<ModalProps> = ({ inputArrays }) => {
                   </option>
                 ))}
               </TextField>
-            )}
+            ):<div></div>}
           </Box>
           <Button onClick={() => sendAddReq()}>Add</Button>
         </Box>
