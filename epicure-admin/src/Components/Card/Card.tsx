@@ -117,7 +117,7 @@ const BasicCard: React.FC<BasicCardProps> = ({ InputsArray, Title }) => {
       }}
       className="card-body"
     >
-      <h1>{Title}</h1>
+      <h1 >{Title}</h1>
       <CardContent className="contant">
           <TextField
             onChange={handleEmailChange}

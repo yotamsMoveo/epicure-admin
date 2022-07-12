@@ -10,13 +10,14 @@ import { SingleDish } from "../../../../Assets/Interfaces/SingleDish";
 import { getBestDishesData } from "../../../../services/api-services";
 import { useEffect, useState } from "react";
 import "../Table/Table.scss";
-import { Button, IconButton } from "@mui/material";
+import { Button, IconButton, TablePagination } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import EditModal from "../../../../Components/Modal/EditModal";
 import { SingleRestaurant } from "../../../../Assets/Interfaces/SingleRestaurant";
 import NewModal from "../../../../Components/Modal/NewModal";
 import DeleteModal from "../../../../Components/Modal/DeleteModal";
+import usePagination from "@mui/material/usePagination/usePagination";
 export interface TableProps {
   Array: any[];
   Title: string;
@@ -64,6 +65,23 @@ const AdminTable: React.FC<TableProps> = ({ Array, Title, Culomns }) => {
   const [dish, setDish] = useState(dishToEdit);
   const inputsForEdit = ["name", "image", "description", "price"];
   const inputsForNew = ["name", "image", "description"];
+  // const [page, setPage] = React.useState(2);
+  // const [rowsPerPage, setRowsPerPage] = React.useState(3);
+
+  // const handleChangePage = (
+  //   event: React.MouseEvent<HTMLButtonElement> | null,
+  //   newPage: number
+  // ) => {
+  //   setPage(newPage);
+  // };
+
+  // const handleChangeRowsPerPage = (
+  //   event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  // ) => {
+  //   setRowsPerPage(parseInt(event.target.value, 10));
+  //   setPage(0);
+  // };
+
   return (
     <div>
       <div className="admin-header">
@@ -94,7 +112,7 @@ const AdminTable: React.FC<TableProps> = ({ Array, Title, Culomns }) => {
                 <TableCell align="left">
                   <img className="table-image" src={currentDish.image} />
                 </TableCell>
-                <TableCell align="left" >
+                <TableCell align="left">
                   <div className="types-array">
                     {currentDish.type.map((type) => (
                       <img className="table-type-image" src={type} />
@@ -136,11 +154,22 @@ const AdminTable: React.FC<TableProps> = ({ Array, Title, Culomns }) => {
           </TableBody>
         </Table>
       </TableContainer>
+      {/* <TablePagination
+      rowsPerPageOptions={[5, 10, 25]}
+        component="div"
+        count={30}
+        page={page}
+        onPageChange={handleChangePage}
+        rowsPerPage={rowsPerPage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      /> */}
       {isEditOpen ? (
         <EditModal inputArrays={inputsForEdit} dishToUpdate={dish} />
-      ):<div></div>}
-      {isNewOpen ? <NewModal inputArrays={inputsForNew} />:<div></div>}
-      {isDeleteOpen ?<DeleteModal dishToDelete={dish} />:<div></div>}
+      ) : (
+        <div></div>
+      )}
+      {isNewOpen ? <NewModal inputArrays={inputsForNew} /> : <div></div>}
+      {isDeleteOpen ? <DeleteModal dishToDelete={dish} /> : <div></div>}
     </div>
   );
 };
